@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const path = require('path');
 const PORT = process.env.PORT || 3000;
 const db = require('./models');
-const { Workout } = require("./models");
+const Workout = require("./models/workout");
 const app = express();
 
 app.use(logger("dev"));
@@ -26,7 +26,7 @@ app.get('/exercise', (req,res)=> {
 });
 
 app.get('/api/workouts', (req, res) => {
-    db.Workout.find({})
+    Workout.find({})
     .then(dbWorkout => {
         res.json(dbWorkout);
     }) .catch (err => {
@@ -35,8 +35,7 @@ app.get('/api/workouts', (req, res) => {
 });
 
 app.post('/api/workouts', (req, res) => {
-    db.Workout.create({})
-    console.log(dbWorkout)
+    Workout.create({})
     .then(dbWorkout => {
         res.json(dbWorkout);
     })
@@ -48,8 +47,8 @@ app.post('/api/workouts', (req, res) => {
 app.put('/api/workouts/:id', ({body, params}, res) => {
     Workout.findByIdAndUpdate(
        params.id, { $push: { exercises: body }}, { new: true }
-    ) .then((dbWorkout) => {
-        res.json(dbWorkout);
+    ) .then(data => {
+        res.json(data);
     })
     .catch((err) => {
         res.json(err)
@@ -57,9 +56,9 @@ app.put('/api/workouts/:id', ({body, params}, res) => {
 });
 
 app.get('/api/workouts/range', (req, res) => {
-    db.Workout.find({}).sort({day: -1}).limit(7)
-    .then(dbWorkout => {
-        res.json(dbWorkout)
+    Workout.find({}).sort({day: -1}).limit(7)
+    .then(data => {
+        res.json(data)
     })
     .catch(err => {
         res.json(err)
