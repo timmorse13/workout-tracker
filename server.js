@@ -26,7 +26,7 @@ app.get('/exercise', (req,res)=> {
 });
 
 app.get('/api/workouts', (req, res) => {
-    Workout.find({})
+    db.Workout.find({})
     .then(dbWorkout => {
         res.json(dbWorkout);
     }) .catch (err => {
@@ -35,7 +35,7 @@ app.get('/api/workouts', (req, res) => {
 });
 
 app.post('/api/workouts', (req, res) => {
-    Workout.create({})
+    db.Workout.create({})
     .then(data => {
         res.json(data);
     })
@@ -45,7 +45,7 @@ app.post('/api/workouts', (req, res) => {
 });
 
 app.put('/api/workouts/:id', ({body, params}, res) => {
-    Workout.findByIdAndUpdate(
+    db.Workout.findByIdAndUpdate(
        params.id, { $push: { exercises: body }}, { new: true }
     ) .then(data => {
         res.json(data);
@@ -56,7 +56,7 @@ app.put('/api/workouts/:id', ({body, params}, res) => {
 });
 
 app.get('/api/workouts/range', (req, res) => {
-    Workout.find({}).sort({day: -1}).limit(7)
+    db.Workout.find({}).sort({day: -1}).limit(7)
     .then(data => {
         res.json(data)
     })
