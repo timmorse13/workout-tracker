@@ -14,6 +14,9 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, "public/index.html"))
+})
 app.get('/exercise', (req,res)=> {
     res.sendFile(path.join(__dirname, "public/exercise.html"))
 });
@@ -24,24 +27,44 @@ app.get('/exercise', (req,res)=> {
 
 app.get('/api/workouts', (req, res) => {
     db.Workout.find({})
-    .then(workoutDb => {
-        res.json(workoutDb);
+    .then(dbWorkout => {
+        res.json(dbWorkout);
     }) .catch (err => {
         res.json(err);
     })
 });
 
 app.post('/api/workouts', (req, res) => {
-    Workout.create({})
-    .then(workoutDb => {
-        res.json(workoutDb);
+    db.Workout.create({})
+    console.log(dbWorkout)
+    .then(dbWorkout => {
+        res.json(dbWorkout);
     })
     .catch(err => {
         res.json(err);
     })
 });
 
+app.put('/api/workouts/:id', ({body, params}, res) => {
+    Workout.findByIdAndUpdate(
+       params.id, { $push: { exercises: body }}, { new: true }
+    ) .then((dbWorkout) => {
+        res.json(dbWorkout);
+    })
+    .catch((err) => {
+        res.json(err)
+    });
+});
 
+app.get('/api/workouts/range', (req, res) => {
+    db.Workout.find({}).sort({day: -1}).limit(7)
+    .then(dbWorkout => {
+        res.json(dbWorkout)
+    })
+    .catch(err => {
+        res.json(err)
+    });
+})
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
