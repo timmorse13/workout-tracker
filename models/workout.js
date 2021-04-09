@@ -36,9 +36,15 @@ const workoutDbSchema = new Schema({
                 type: Number
             }
         }
-]
+    ]
     
-})
+},
+{
+    toJSON: { virtuals: true }
+}
+
+);
+
 
 const Workout = mongoose.model("Workout", workoutDbSchema)
 
