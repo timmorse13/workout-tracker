@@ -36,8 +36,8 @@ app.get('/api/workouts', (req, res) => {
 
 app.post('/api/workouts', (req, res) => {
     Workout.create({})
-    .then(dbWorkout => {
-        res.json(dbWorkout);
+    .then(data => {
+        res.json(data);
     })
     .catch(err => {
         res.json(err);
